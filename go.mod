@@ -1,3 +1,8 @@
 module github.com/haleyrc/phir
 
-go 1.22.0
+go 1.23.1
+
+require (
+	github.com/haleyrc/server v0.0.1
+	github.com/joho/godotenv v1.5.1
+)

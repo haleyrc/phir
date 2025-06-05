@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "[ bin/clean ] Updating dependencies"
+go mod tidy
+
+echo "[ bin/clean ] Verifying dependencies"
+go mod verify
