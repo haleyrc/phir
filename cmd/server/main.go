@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/haleyrc/phir/app/controllers"
 	"github.com/haleyrc/server"
 	"github.com/joho/godotenv"
 )
@@ -22,7 +23,10 @@ func main() {
 		Level: slog.LevelDebug,
 	}))
 
+	appController := controllers.NewAppController(logger)
+
 	router := http.NewServeMux()
+	router.HandleFunc("GET /{$}", appController.Index)
 
 	server := server.New(os.Getenv("PORT"), router)
 	logger.Info("server listening", slog.String("addr", server.Addr()))
