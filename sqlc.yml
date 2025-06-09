@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries: "ddl/query.sql"
+    schema: "ddl/schema.sql"
+    gen:
+      go:
+        out: "app/db"
+        emit_interface: true
+

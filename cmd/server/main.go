@@ -9,6 +9,8 @@ import (
 	"os/signal"
 
 	"github.com/haleyrc/phir/app/controllers"
+	"github.com/haleyrc/phir/app/models"
+	"github.com/haleyrc/phir/lib/sqlite"
 	"github.com/haleyrc/server"
 	"github.com/joho/godotenv"
 )
@@ -23,7 +25,15 @@ func main() {
 		Level: slog.LevelDebug,
 	}))
 
-	appController := controllers.NewAppController(logger)
+	conn, err := sqlite.Open("dev.db")
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	repo := models.NewRepository(conn)
+
+	appController := controllers.NewAppController(logger, repo)
 
 	router := http.NewServeMux()
 	router.HandleFunc("GET /{$}", appController.Index)

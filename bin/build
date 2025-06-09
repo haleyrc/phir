@@ -8,5 +8,8 @@ templ fmt .
 echo "[ bin/build ] Generating Go source from templ"
 templ generate
 
+echo "[ bin/build ] Generating sqlc models"
+sqlc generate
+
 echo "[ bin/build ] Verifying build"
 go build -o /dev/null ./...

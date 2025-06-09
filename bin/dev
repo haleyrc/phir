@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+echo "[ bin/dev ] Resetting the development database"
+rm -f dev.db
+sqlite3 dev.db < ddl/schema.sql
+
 echo "[ bin/dev ] Starting server"
 go run ./cmd/server
-
