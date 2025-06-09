@@ -1,4 +1,4 @@
-package pages
+package patients
 
 import (
 	"github.com/haleyrc/phir/app/models"
@@ -11,6 +11,13 @@ type IndexProps struct {
 
 templ Index(props IndexProps) {
 	@layouts.Layout() {
-		<h1>Home</h1>
+		<h1>Patients</h1>
+		<ul>
+			for _, patient := range props.Patients {
+				<li>
+					<a href="#">{ patient.LastName }, { patient.FirstName }</a>
+				</li>
+			}
+		</ul>
 	}
 }

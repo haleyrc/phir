@@ -34,8 +34,10 @@ func main() {
 	repo := models.NewRepository(conn)
 
 	appController := controllers.NewAppController(logger, repo)
+	patientsController := controllers.NewPatientsController(logger, repo)
 
 	router := http.NewServeMux()
+	router.HandleFunc("GET /patients", patientsController.Index)
 	router.HandleFunc("GET /{$}", appController.Index)
 
 	server := server.New(os.Getenv("PORT"), router)
