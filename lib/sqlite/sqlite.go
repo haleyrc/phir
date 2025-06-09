@@ -14,6 +14,14 @@ type Conn struct {
 	path string
 }
 
+func MustOpen(dataSourceName string) *Conn {
+	conn, err := Open(dataSourceName)
+	if err != nil {
+		panic(err)
+	}
+	return conn
+}
+
 func Open(dataSourceName string) (*Conn, error) {
 	db, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {

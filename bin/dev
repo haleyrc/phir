@@ -6,5 +6,8 @@ echo "[ bin/dev ] Resetting the development database"
 rm -f dev.db
 sqlite3 dev.db < ddl/schema.sql
 
+echo "[ bin/dev ] Creating development data"
+go run ./scripts/seed.go
+
 echo "[ bin/dev ] Starting server"
 go run ./cmd/server

@@ -9,6 +9,27 @@ import (
 	"context"
 )
 
+const createPatient = `-- name: CreatePatient :one
+INSERT INTO patients (
+  first_name, last_name
+) VALUES (
+  ?, ?
+)
+RETURNING id, first_name, last_name
+`
+
+type CreatePatientParams struct {
+	FirstName string
+	LastName  string
+}
+
+func (q *Queries) CreatePatient(ctx context.Context, arg CreatePatientParams) (Patient, error) {
+	row := q.db.QueryRowContext(ctx, createPatient, arg.FirstName, arg.LastName)
+	var i Patient
+	err := row.Scan(&i.ID, &i.FirstName, &i.LastName)
+	return i, err
+}
+
 const listPatients = `-- name: ListPatients :many
 SELECT id, first_name, last_name FROM patients
 ORDER BY id
