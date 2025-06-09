@@ -5,6 +5,9 @@ import (
 	"net/http"
 
 	"github.com/haleyrc/phir/app/models"
+	"github.com/haleyrc/phir/app/routes"
+	"github.com/haleyrc/phir/app/services"
+	"github.com/haleyrc/phir/lib/web"
 	"github.com/haleyrc/phir/templates/pages/patients"
 )
 
@@ -35,5 +38,40 @@ func (c *PatientsController) Index(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := patients.Index(props).Render(ctx, w); err != nil {
 		c.Logger.ErrorContext(ctx, "patients controller: index", slog.Any("err", err))
+	}
+}
+
+func (c *PatientsController) New(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	if err := patients.New(models.Patient{}).Render(ctx, w); err != nil {
+		c.Logger.ErrorContext(ctx, "patients controller: new", slog.Any("err", err))
+	}
+}
+
+func NewCreatePatientParams(r *http.Request) services.CreatePatientParams {
+	return services.CreatePatientParams{
+		FirstName: web.NewString(r.PostFormValue("first_name")),
+		LastName:  web.NewString(r.PostFormValue("last_name")),
+	}
+}
+
+func (c *PatientsController) Create(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	params := NewCreatePatientParams(r)
+	result, err := services.NewPatientCreator(c.Repo).CreatePatient(ctx, params)
+	if err != nil {
+		c.Logger.ErrorContext(ctx, "patients controller: create", slog.Any("err", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if result.Created {
+		http.Redirect(w, r, routes.PatientsPath(), http.StatusSeeOther)
+		return
+	}
+
+	if err := patients.New(result.Patient).Render(ctx, w); err != nil {
+		c.Logger.ErrorContext(ctx, "patients controller: new", slog.Any("err", err))
 	}
 }
