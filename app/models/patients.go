@@ -54,6 +54,14 @@ func (repo *Repository) CreatePatient(ctx context.Context, params CreatePatientP
 	return patient, nil
 }
 
+func (repo *Repository) GetPatient(ctx context.Context, id int64) (Patient, error) {
+	w, err := repo.q.GetPatient(ctx, id)
+	if err != nil {
+		return Patient{}, fmt.Errorf("repo: get patient: %w", err)
+	}
+	return Patient{Patient: w}, nil
+}
+
 func (repo *Repository) ListPatients(ctx context.Context) ([]Patient, error) {
 	ws, err := repo.q.ListPatients(ctx)
 	if err != nil {

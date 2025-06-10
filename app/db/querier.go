@@ -10,6 +10,7 @@ import (
 
 type Querier interface {
 	CreatePatient(ctx context.Context, arg CreatePatientParams) (Patient, error)
+	GetPatient(ctx context.Context, id int64) (Patient, error)
 	ListPatients(ctx context.Context) ([]Patient, error)
 }
 

@@ -17,7 +17,7 @@ templ Index(props IndexProps) {
 		<ul>
 			for _, patient := range props.Patients {
 				<li>
-					<a href="#">{ patient.LastName }, { patient.FirstName }</a>
+					<a href={ templ.URL(routes.PatientPath(patient)) }>{ patient.LastName }, { patient.FirstName }</a>
 				</li>
 			}
 		</ul>

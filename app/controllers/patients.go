@@ -75,3 +75,19 @@ func (c *PatientsController) Create(w http.ResponseWriter, r *http.Request) {
 		c.Logger.ErrorContext(ctx, "patients controller: new", slog.Any("err", err))
 	}
 }
+
+func (c *PatientsController) Show(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	id := r.PathValue("id")
+	patient, err := c.Repo.GetPatient(ctx, web.NewInt(id))
+	if err != nil {
+		c.Logger.ErrorContext(ctx, "patients controller: show", slog.String("id", id), slog.Any("err", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := patients.Show(patient).Render(ctx, w); err != nil {
+		c.Logger.ErrorContext(ctx, "patients controller: show", slog.String("id", id), slog.Any("err", err))
+	}
+}

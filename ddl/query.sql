@@ -6,6 +6,10 @@ INSERT INTO patients (
 )
 RETURNING *;
 
+-- name: GetPatient :one
+SELECT * FROM patients
+WHERE id = ?;
+
 -- name: ListPatients :many
 SELECT * FROM patients
 ORDER BY id;

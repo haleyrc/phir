@@ -1,0 +1,13 @@
+package patients
+
+import (
+	"github.com/haleyrc/phir/app/models"
+	"github.com/haleyrc/phir/templates/layouts"
+)
+
+templ Show(patient models.Patient) {
+	@layouts.Layout() {
+		<h1>Patient Information</h1>
+		<h2 data-testid="patient-name">{ patient.LastName }, { patient.FirstName }</h2>
+	}
+}

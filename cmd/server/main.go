@@ -37,9 +37,10 @@ func main() {
 	patientsController := controllers.NewPatientsController(logger, repo)
 
 	router := http.NewServeMux()
+	router.HandleFunc("GET /patients/new", patientsController.New)
+	router.HandleFunc("GET /patients/{id}", patientsController.Show)
 	router.HandleFunc("GET /patients", patientsController.Index)
 	router.HandleFunc("POST /patients", patientsController.Create)
-	router.HandleFunc("GET /patients/new", patientsController.New)
 	router.HandleFunc("GET /{$}", appController.Index)
 
 	server := server.New(os.Getenv("PORT"), router)
